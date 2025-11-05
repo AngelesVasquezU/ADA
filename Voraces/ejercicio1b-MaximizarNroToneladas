@@ -1,0 +1,46 @@
+/*
+Se tiene un buque mercante cuya capacidad de carga es de k toneladas y un
+conjunto de contenedores c1, …, cn cuyos pesos respectivos son p1, …, pn
+(expresados también en toneladas).Teniendo en cuenta que la capacidad del
+buque es menor que la suma total de los pesos de los contenedores :
+
+b. Diseñe un algoritmo que intente maximizar el número de toneladas cargadas.
+*/
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Contenedor {
+	int nro;
+	double peso;
+	Contenedor(int nro_, double peso_) { nro = nro_, peso = peso_; }
+};
+
+bool compararPorPeso(Contenedor& a, Contenedor& b) {
+	return a.peso > b.peso;
+}
+
+void maximizarContenedores(std::vector<Contenedor>& Contenedores, std::vector<Contenedor>& solucion, int k) {
+	std::sort(Contenedores.begin(), Contenedores.end(), compararPorPeso);
+	double pesoCargado = 0.0;
+	for (const auto& cont : Contenedores) {
+		if (pesoCargado + cont.peso <= k) {
+			pesoCargado += cont.peso;
+			solucion.push_back(cont);
+		}
+	}
+	std::cout << "Peso cargado: " << pesoCargado << std::endl;
+}
+
+int main()
+{
+	double k = 20.0; // capacidad del buque
+	std::vector<Contenedor> contenedores = { {1, 12.0}, {2, 2.5}, {3, 1.5}, {4, 14.0}, {5, 2.3}, {6, 4.6},{7,3.9},{8,1.2} ,{9,0.7} };
+	std::vector<Contenedor> solucion;
+	maximizarContenedores(contenedores, solucion, k);
+	std::cout << "Nro contenedores = " << solucion.size() << std::endl;
+	for (auto cont : solucion) {
+		std::cout << " [" << cont.nro << ", " << cont.peso << " ]";
+	}
+}
